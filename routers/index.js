@@ -11,6 +11,8 @@ const bankAccount = require('./bankAccount');
 const bank = require('./bank');
 const favoritShop = require('./favoritShop');
 const wishlist = require('./wishlist');
+const history = require('./history');
+const historyDetail = require('./historyDetail');
 
 router
   .use('/user', userId)
@@ -23,6 +25,8 @@ router
   .use('/bank', bank)
   .use('/favoritshop', favoritShop)
   .use('/wishlist', wishlist)
+  .use('/history', history)
+  .use('/historydetail', historyDetail)
   .get('/', function(req,res) {
     res.send({
       message: 'Welcome to Tokodidia API',
