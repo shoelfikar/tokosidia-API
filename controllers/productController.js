@@ -1,22 +1,20 @@
-const user_id = require('../models').user_id;
+const product = require('../models').product;
 const helpers = require('../helpers/response');
 
 module.exports = {
-  insertUser: (async (req, res) => {
+  insertProduct : (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await user_id.create(body);
+      const data = await product.create(body);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
-
         helpers.helpers(res, response);
       } else {
-        response.status = 200;
-        response.message = 'OK';
+        response.status = 201;
+        response.message = 'Product Has Been Created';
         response.data = data;
-
         helpers.helpers(res, response);
       }
     } catch (err) {
@@ -24,18 +22,17 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   }),
-  getUser: (async(req, res) => {
+  getProduct: (async(req,res) => {
     let response = {};
     try {
-      const data = await user_id.findAll({});
+      const data = await product.findAll({});
       if (data.length === 0) {
         response.status = 404;
-        response.message = 'User List not Found!';
-        helpers.helpers(res, response); 
+        response.message = 'Product not Found!';
+        helpers.helpers(res, response);
       } else {
         response.status = 200;
         response.message = 'OK!';
@@ -50,22 +47,19 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-
-  detailUser: (async(req, res) => {
-    let response = {};
+  detailProduct : (async(req, res) => {
+    let response = {}
     try {
-      userId = req.params.userId;
-
-      const data = await user_id.findOne({
+      const productId = req.params.productId;
+      const data = await product.findOne ({
         where: {
-          id: userId,
+          id: productId,
         },
       });
-
       if (!data) {
         response.status = 404;
-        response.message = 'User Detail not Found!';
-        helpers.helpers(res, response); 
+        response.message = 'Product not Found!';
+        helpers.helpers(res, response);
       } else {
         response.status = 200;
         response.message = 'OK!';
@@ -77,38 +71,33 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   }),
-
-  updateUser: (async(req, res) => {
+  updateProduct : (async(req,res) => {
     let response = {};
     try {
-      const userId = req.params.userId;
+      const productId = req.params.productId;
       const body = req.body;
 
-      const [edit] = await user_id.update(body, {
-        where: {
-          id: userId,
+      const [edit] = await product.update(body,
+        {where: {
+          id: productId,
         },
       });
-      const data = await user_id.findOne({
+
+      const data = await product.findOne({
         where: {
-          id: userId,
+          id: productId
         },
       });
-      console.log(edit);
-      
-      console.log('here');
+
       if (edit === 1) {
         response.status = 201;
-        response.message = 'User Successfully Edited';
+        response.message = 'Product Successfully Edited';
         response.data = data;
-
         helpers.helpers(res, response);
-      }
-      if (edit === 0) {
+      } if (edit === 0) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
@@ -116,29 +105,26 @@ module.exports = {
     } catch (err) {
       response.status = 500;
       response.message = 'Internal Server Error';
-
       helpers.helpers(res, response);
     }
   }),
-
-  deleteUser: (async(req,res) => {
+  deleteProduct: (async(req, res) => {
     let response = {};
     try {
-      const userId = req.params.userId;
-      const data = await user_id.destroy({
+      const productId = req.params.productId;
+      const data = await product.destroy({
         where: {
-          id: userId,
-        }
+          id: productId
+        },
       });
+      
       if (data) {
         response.status = 200;
-        response.message = 'Successfully Deleted';
-
+        response.message = 'Product Successfully Deleted';
         helpers.helpers(res, response);
       } else {
         response.status = 404;
         response.message = 'Data Not Found';
-
         helpers.helpers(res, response);
       }
     } catch (err) {
@@ -146,7 +132,6 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   })

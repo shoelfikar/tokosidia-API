@@ -1,22 +1,21 @@
-const user_id = require('../models').user_id;
+const seller = require('../models').seller;
 const helpers = require('../helpers/response');
 
+
 module.exports = {
-  insertUser: (async (req, res) => {
+  insertSeller: (async(req,res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await user_id.create(body);
+      const data = await seller.create(body);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
-
         helpers.helpers(res, response);
-      } else {
+      }else {
         response.status = 200;
         response.message = 'OK';
         response.data = data;
-
         helpers.helpers(res, response);
       }
     } catch (err) {
@@ -24,18 +23,17 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   }),
-  getUser: (async(req, res) => {
+  getSeller: (async(req,res) => {
     let response = {};
     try {
-      const data = await user_id.findAll({});
+      const data = await seller.findAll({});
       if (data.length === 0) {
         response.status = 404;
-        response.message = 'User List not Found!';
-        helpers.helpers(res, response); 
+        response.message = 'Seller List not Found!';
+        helpers.helpers(res, response);
       } else {
         response.status = 200;
         response.message = 'OK!';
@@ -50,22 +48,21 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-
-  detailUser: (async(req, res) => {
+  detailSeller: (async(req,res) => {
     let response = {};
     try {
-      userId = req.params.userId;
+      sellerId = req.params.sellerId;
 
-      const data = await user_id.findOne({
+      const data = await seller.findOne({
         where: {
-          id: userId,
+          id: sellerId,
         },
       });
-
+      
       if (!data) {
         response.status = 404;
-        response.message = 'User Detail not Found!';
-        helpers.helpers(res, response); 
+        response.message = 'Seller Detail not Found!';
+        helpers.helpers(res, response);
       } else {
         response.status = 200;
         response.message = 'OK!';
@@ -77,35 +74,31 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   }),
 
-  updateUser: (async(req, res) => {
+  updateSeller: (async(req, res) => {
     let response = {};
     try {
-      const userId = req.params.userId;
+      const sellerId = req.params.sellerId;
       const body = req.body;
 
-      const [edit] = await user_id.update(body, {
+      const [edit] = await seller.update(body, {
         where: {
-          id: userId,
+          id: sellerId,
         },
       });
-      const data = await user_id.findOne({
+      const data = await seller.findOne({
         where: {
-          id: userId,
+          id: sellerId,
         },
       });
-      console.log(edit);
-      
-      console.log('here');
+
       if (edit === 1) {
         response.status = 201;
-        response.message = 'User Successfully Edited';
+        response.message = 'Seller Successfully Edited';
         response.data = data;
-
         helpers.helpers(res, response);
       }
       if (edit === 0) {
@@ -116,29 +109,27 @@ module.exports = {
     } catch (err) {
       response.status = 500;
       response.message = 'Internal Server Error';
-
       helpers.helpers(res, response);
     }
   }),
 
-  deleteUser: (async(req,res) => {
+  deleteSeller: (async(req,res) => {
     let response = {};
     try {
-      const userId = req.params.userId;
-      const data = await user_id.destroy({
+      const sellerId = req.params.sellerId;
+      const data = await seller.destroy({
         where: {
-          id: userId,
+          id: sellerId
         }
       });
+      
       if (data) {
         response.status = 200;
         response.message = 'Successfully Deleted';
-
         helpers.helpers(res, response);
       } else {
         response.status = 404;
         response.message = 'Data Not Found';
-
         helpers.helpers(res, response);
       }
     } catch (err) {
@@ -146,8 +137,8 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   })
+
 }

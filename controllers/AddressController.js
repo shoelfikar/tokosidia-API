@@ -1,22 +1,21 @@
-const user_id = require('../models').user_id;
+const address = require('../models').address;
 const helpers = require('../helpers/response');
 
+
 module.exports = {
-  insertUser: (async (req, res) => {
+  insertAddress: (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await user_id.create(body);
+      const data = await address.create(body);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
-
         helpers.helpers(res, response);
       } else {
         response.status = 200;
-        response.message = 'OK';
+        response.message = 'Success Create!';
         response.data = data;
-
         helpers.helpers(res, response);
       }
     } catch (err) {
@@ -24,21 +23,21 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   }),
-  getUser: (async(req, res) => {
+
+  getAddress: (async(req, res) => {
     let response = {};
     try {
-      const data = await user_id.findAll({});
+      const data = await address.findAll({});
       if (data.length === 0) {
         response.status = 404;
-        response.message = 'User List not Found!';
+        response.message = 'Address List not Found!';
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
-        response.message = 'OK!';
+        response.message = 'Data All Address!';
         response.data = data;
         helpers.helpers(res, response);
       }
@@ -51,20 +50,20 @@ module.exports = {
     }
   }),
 
-  detailUser: (async(req, res) => {
+  detailAddress: (async(req, res) => {
     let response = {};
     try {
-      userId = req.params.userId;
+      addressId = req.params.addressId;
 
-      const data = await user_id.findOne({
+      const data = await address.findOne({
         where: {
-          id: userId,
+          id: addressId,
         },
       });
 
       if (!data) {
         response.status = 404;
-        response.message = 'User Detail not Found!';
+        response.message = 'Address Detail not Found!';
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
@@ -77,38 +76,34 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   }),
 
-  updateUser: (async(req, res) => {
+  updateAddress: (async(req, res) => {
     let response = {};
     try {
-      const userId = req.params.userId;
+      const addressId = req.params.addressId;
       const body = req.body;
 
-      const [edit] = await user_id.update(body, {
+      const [edit] = await address.update(body, {
         where: {
-          id: userId,
+          id: addressId,
         },
       });
-      const data = await user_id.findOne({
+      const data = await address.findOne({
         where: {
-          id: userId,
+          id:addressId,
         },
       });
-      console.log(edit);
-      
-      console.log('here');
+
       if (edit === 1) {
         response.status = 201;
-        response.message = 'User Successfully Edited';
+        response.message = 'Address Successfully Edited';
         response.data = data;
-
         helpers.helpers(res, response);
       }
-      if (edit === 0) {
+      if( edit === 0) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
@@ -116,29 +111,27 @@ module.exports = {
     } catch (err) {
       response.status = 500;
       response.message = 'Internal Server Error';
-
       helpers.helpers(res, response);
     }
   }),
 
-  deleteUser: (async(req,res) => {
+  deleteAddress: (async( req, res) => {
     let response = {};
     try {
-      const userId = req.params.userId;
-      const data = await user_id.destroy({
+      const addressId = req.params.addressId
+      const data = await address.destroy({
         where: {
-          id: userId,
-        }
+          id: addressId,
+        },
       });
-      if (data) {
+
+      if(data) {
         response.status = 200;
         response.message = 'Successfully Deleted';
-
         helpers.helpers(res, response);
       } else {
         response.status = 404;
         response.message = 'Data Not Found';
-
         helpers.helpers(res, response);
       }
     } catch (err) {
@@ -146,7 +139,6 @@ module.exports = {
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
-
       helpers.helpers(res, response);
     }
   })
