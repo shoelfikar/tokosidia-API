@@ -7,6 +7,8 @@ const address = require('./address');
 const roleId = require('./roleId');
 const product = require('./product');
 const status = require('./status');
+const bankAccount = require('./bankAccount');
+const bank = require('./bank');
 
 router
   .use('/user', userId)
@@ -15,6 +17,8 @@ router
   .use('/role', roleId)
   .use('/product', product)
   .use('/status', status)
+  .use('/bankaccount', bankAccount)
+  .use('/bank', bank)
   .get('/', function(req,res) {
     res.send({
       message: 'Welcome to Tokodidia API',
