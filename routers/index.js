@@ -11,6 +11,9 @@ const bankAccount = require('./bankAccount');
 const bank = require('./bank');
 const favoritShop = require('./favoritShop');
 const wishlist = require('./wishlist');
+const category = require('./category');
+const subCategory = require('./subCategory');
+const subSubCategory = require('./subSubCategory');
 
 router
   .use('/user', userId)
@@ -23,6 +26,9 @@ router
   .use('/bank', bank)
   .use('/favoritshop', favoritShop)
   .use('/wishlist', wishlist)
+  .use('/category', category)
+  .use('/subcategory', subCategory)
+  .use('/subsubcategory', subSubCategory)
   .get('/', function(req,res) {
     res.send({
       message: 'Welcome to Tokodidia API',
