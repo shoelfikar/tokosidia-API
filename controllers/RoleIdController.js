@@ -1,13 +1,14 @@
-const address = require('../models').address;
+const role_id = require('../models/').role_id;
 const helpers = require('../helpers/response');
 
 
+
 module.exports = {
-  insertAddress: (async(req, res) => {
+  insertRole: (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await address.create(body);
+      const data = await role_id.create(body);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
@@ -25,19 +26,20 @@ module.exports = {
       response.err = err;
       helpers.helpers(res, response);
     }
+
   }),
 
-  getAddress: (async(req, res) => {
+  getRole: (async(req, res) => {
     let response = {};
     try {
-      const data = await address.findAll({});
+      const data = await role_id.findAll({});
       if (data.length === 0) {
         response.status = 404;
-        response.message = 'Address List not Found!';
+        response.message = 'RoleId List not Found!';
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
-        response.message = 'Data All Address!';
+        response.message = 'Data All RoleId!';
         response.data = data;
         helpers.helpers(res, response);
       }
@@ -50,20 +52,20 @@ module.exports = {
     }
   }),
 
-  detailAddress: (async(req, res) => {
+  detailRole: (async(req, res) => {
     let response = {};
     try {
-      addressId = req.params.addressId;
+      roleId = req.params.roleId;
 
-      const data = await address.findOne({
+      const data = await role_id.findOne({
         where: {
-          id: addressId,
+          id: roleId,
         },
       });
 
       if (!data) {
         response.status = 404;
-        response.message = 'Address Detail not Found!';
+        response.message = 'RoleId Detail not Found!';
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
@@ -80,30 +82,30 @@ module.exports = {
     }
   }),
 
-  updateAddress: (async(req, res) => {
+  updateRole: (async(req, res) => {
     let response = {};
     try {
-      const addressId = req.params.addressId;
+      const roleId = req.params.roleId;
       const body = req.body;
 
-      const [edit] = await address.update(body, {
+      const [edit] = await role_id.update(body, {
         where: {
-          id: addressId,
+          id: roleId,
         },
       });
-      const data = await address.findOne({
+      const data = await role_id.findOne({
         where: {
-          id:addressId,
-        },
-      });
+          id: roleId
+        }
+      })
 
       if (edit === 1) {
         response.status = 200;
         response.message = 'Address Successfully Edited';
         response.data = data;
         helpers.helpers(res, response);
-      }
-      if( edit === 0) {
+      } 
+      if (edit === 0) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
@@ -115,17 +117,17 @@ module.exports = {
     }
   }),
 
-  deleteAddress: (async( req, res) => {
+  deleteRole: (async(req,res) => {
     let response = {};
     try {
-      const addressId = req.params.addressId;
-      const data = await address.destroy({
+      const roleId = req.params.roleId;
+      const data = await role_id.destroy({
         where: {
-          id: addressId,
+          id: roleId,
         },
       });
 
-      if(data) {
+      if (data) {
         response.status = 200;
         response.message = 'Successfully Deleted';
         helpers.helpers(res, response);

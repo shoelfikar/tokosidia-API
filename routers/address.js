@@ -8,7 +8,7 @@ router
   .post('/', addressController.insertAddress)
   .get('/', addressController.getAddress)
   .get('/:addressId', addressController.detailAddress)
-  .pus('/:addressId', addressController.updateAddress)
+  .put('/:addressId', addressController.updateAddress)
 
 
 
