@@ -1,4 +1,6 @@
 const category = require('../models').category;
+const subCategory = require('../models').subCategory;
+const subSubCategory = require('../models').subSubCategory;
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -29,7 +31,18 @@ module.exports = {
   getCategory: (async(req, res) => {
     let response = {};
     try {
-      const data = await category.findAll({})
+      const data = await category.findAll({
+        include: {
+          model: subCategory,
+          as: 'SubCategory',
+          attributes: ['name'],
+          include: [{
+            model: subSubCategory,
+            as: 'SubSubCategory',
+            attributes: ['name']
+          }],
+        }
+      })
       if (data.length === 0) {
         response.status = 404;
         response.message = 'Category List not Found!';
