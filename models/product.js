@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     stock_product: DataTypes.STRING,
     weight: DataTypes.STRING,
     category: DataTypes.STRING,
+    subCategory: DataTypes.STRING,
+    subSubCategory: DataTypes.STRING,
     rating: DataTypes.STRING,
     seller_id: DataTypes.STRING
   }, {});
