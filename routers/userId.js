@@ -6,6 +6,7 @@ const userIdController = require('../controllers/UserIdController');
 
 router
   .post('/register', userIdController.insertUser)
+  .post('/login', userIdController.loginUser)
   .get('/', userIdController.getUser)
   .get('/:userId', userIdController.detailUser)
   .put('/:userId', userIdController.updateUser)
