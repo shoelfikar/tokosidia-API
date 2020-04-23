@@ -1,4 +1,7 @@
 const product = require('../models').product;
+const category = require('../models').category;
+const subCategory = require('../models').subCategory;
+const subSubCategory = require('../models').subSubCategory;
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -28,7 +31,22 @@ module.exports = {
   getProduct: (async(req,res) => {
     let response = {};
     try {
-      const data = await product.findAll({});
+      const data = await product.findAll({
+        include: [{
+          model: category,
+          as: 'categoryName',
+          attributes: ['name']
+      },  {
+          model: subCategory,
+          as: 'subCategoryName',
+          attributes: ['name'],
+      },  {
+        model: subSubCategory,
+        as: 'subSubCategoryName',
+        attributes: ['name'],
+      }
+    ]
+      });
       if (data.length === 0) {
         response.status = 404;
         response.message = 'Product not Found!';
