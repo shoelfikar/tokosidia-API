@@ -1,6 +1,8 @@
-
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const user_id = require('../models').user_id;
+const seller = require('../models').seller;
 const helpers = require('../helpers/response');
 
 
@@ -30,7 +32,7 @@ module.exports = {
         helpers.helpers(res, response);
       } else {
         response.status = 200;
-        response.message = 'OK';
+        response.message = 'Register Success, Please check your email for activation!';
         response.data = data;
         helpers.helpers(res, response);
       }
@@ -44,6 +46,7 @@ module.exports = {
     }
   }),
   loginUser: (async (req, res) => {
+    
     let response = {};
     try {
       const users = await user_id.findOne({
@@ -51,14 +54,16 @@ module.exports = {
           email: req.body.email
         }
       });
-        if (!users) {
-          response.status = 404;
-          response.message = 'Wrong Email';
-          helpers.helpers(res, response);
-        } else if (users) {
-          const authorized = bcrypt.compareSync(req.body.password, users.dataValues.password);
-          if (authorized) {
+      if (!users) {
+        response.status = 404;
+        response.message = 'Wrong Email';
+        helpers.helpers(res, response);
+      } else if (users) {
+        const authorized = bcrypt.compareSync(req.body.password, users.dataValues.password);
+        if (authorized) {
+              const token = jwt.sign({ id: users.id, email: users.email}, process.env.SECRET_KEY);
               users.dataValues.password = undefined;
+              users.dataValues.token = token;
               response.status = 200;
               response.message = 'Login Success';
               response.data = users.dataValues;
@@ -69,7 +74,8 @@ module.exports = {
               helpers.helpers(res, response);
           }
         }  
-    } catch (err) {
+    } 
+    catch (err) {
       response = {};
       response.status = 500;
       response.message = 'Internal Server Error';
@@ -81,7 +87,11 @@ module.exports = {
   getUser: (async(req, res) => {
     let response = {};
     try {
-      const data = await user_id.findAll({});
+      const data = await user_id.findAll({
+        include: [
+          {model: seller, as:'store', attributes: ['name', 'address']}
+        ]
+      });
       if (data.length === 0) {
         response.status = 404;
         response.message = 'User List not Found!';
