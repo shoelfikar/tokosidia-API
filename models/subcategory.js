@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   subCategory.associate = function(models) {
     // associations can be defined here
+    subCategory.hasMany(models.subSubCategory, {
+      foreignKey: 'sub_category_id',
+      as: 'SubSubCategory',
+    })
   };
   return subCategory;
 };
