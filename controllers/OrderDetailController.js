@@ -86,7 +86,7 @@ module.exports = {
         },
       });
 
-      const data = await orderDetailId.findOne({
+      const data = await orderDetail.findOne({
         where: {
           id: orderDetailId,
         },
@@ -113,7 +113,7 @@ module.exports = {
     let response = {};
     try {
       const orderDetailId = req.params.orderDetailId;
-      const data = await destroy({
+      const data = await orderDetail.destroy({
         where: {
           id: orderDetailId,
         },
