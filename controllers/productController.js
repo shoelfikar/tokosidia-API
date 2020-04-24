@@ -1,4 +1,7 @@
 const product = require('../models').product;
+const category = require('../models').category;
+const subCategory = require('../models').subCategory;
+const subSubCategory = require('../models').subSubCategory;
 const seller = require('../models').seller;
 const users = require('../models').user_id;
 const helpers = require('../helpers/response');
@@ -31,10 +34,27 @@ module.exports = {
     let response = {};
     try {
       const data = await product.findAll({
-        include: [
-          {model: seller, as:'seller', attributes: ['name', 'address'],},
-          {model: users, as:'users', attributes: ['fullname', 'email', 'phone_number'],}
-        ]
+        include: [{
+          model: category,
+          as: 'categoryName',
+          attributes: ['name']
+      },  {
+          model: subCategory,
+          as: 'subCategoryName',
+          attributes: ['name'],
+      },  {
+        model: subSubCategory,
+        as: 'subSubCategoryName',
+        attributes: ['name'],
+      }, {
+        model: seller,
+        as:'seller',
+        attributes: ['name', 'address']
+      }, {
+        model: users,
+        as:'users',
+        attributes: ['fullname', 'email', 'phone_number']}
+      ]
       });
       if (data.length === 0) {
         response.status = 404;

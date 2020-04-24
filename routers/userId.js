@@ -8,6 +8,7 @@ router
   .post('/register', userIdController.insertUser)
   .post('/login', userIdController.loginUser)
   .get('/', userIdController.getUser)
+  .get('/auth/', userIdController.authUser)
   .get('/:userId', userIdController.detailUser)
   .put('/:userId', userIdController.updateUser)
   .delete('/:userId', userIdController.deleteUser)

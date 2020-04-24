@@ -12,12 +12,12 @@ module.exports = {
     });
     // eslint-disable-next-line prefer-const
     let response = [];
-    const link = `Click <a href="${process.env.URL_EMAIL_CONFIRM}?encrypt=${data.encrypt}"></a>`;
     const mailOptions = {
       from: process.env.EMAIL,
-      to: data.email,
+      to: 'sulfikardi25@gmail.com',
       subject: 'Email Confirmation',
-      text: link,
+      text: 'Registrasi Akun',
+      html: '<p>Click<a href="http://localhost:8080/auth/?activated=' + encrypt +'">here</a></p>'
     };
 
     transporter.sendMail(mailOptions, (err) => {
