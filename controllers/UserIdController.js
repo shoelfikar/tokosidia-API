@@ -10,12 +10,14 @@ module.exports = {
     let response = {};
     try {
       const salt = bcrypt.genSaltSync(10);
+      console.log('email');
+        
       const data = await user_id.create({
         email: req.body.email,
         fullname: req.body.fullname,
         password: bcrypt.hashSync(req.body.password, salt),
         status: req.body.status,
-        image: req.body.image,
+        image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
         phone_number: req.body.phone_number,
         address: req.body.address,
         role: req.body.role,
