@@ -11,6 +11,7 @@ router
   .get('/auth/', userIdController.authUser)
   .get('/:userId', userIdController.detailUser)
   .put('/:userId', userIdController.updateUser)
+  .patch('/resetpassword/', userIdController.resetPassword)
   .delete('/:userId', userIdController.deleteUser)
 
 

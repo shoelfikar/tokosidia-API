@@ -182,7 +182,7 @@ module.exports = {
           ]},
           {model: role, as: 'user_role', attributes:['role']},
           {model: favorit, as: 'favorit', attributes:['seller_id'], include:[
-            {model: seller, as:'seller_fav', attributes: ['name']}
+            {model: seller, as:'seller_fav', attributes: ['name', 'address']}
           ] },
           {model: address, as: 'addresses', attributes:['address', 'phone_number']},
           {model: wishlist, as: 'userWish', attributes:['produk_id'], include: [
@@ -207,12 +207,12 @@ module.exports = {
         },
         include: [
           {model: seller, as:'store', attributes: ['name', 'address']},
-          {model: account, as: 'account', attributes:['bank_id', 'account_number'], include: [
+          {model: account, as: 'account', attributes:['bank_id', 'account_number', 'account_name'], include: [
             {model: bank, as: 'bankName', attributes:['bank_name']}
           ]},
           {model: role, as: 'user_role', attributes:['role']},
           {model: favorit, as: 'favorit', attributes:['seller_id'], include:[
-            {model: seller, as:'seller_fav', attributes: ['name']}
+            {model: seller, as:'seller_fav', attributes: ['name', 'address']}
           ] },
           {model: address, as: 'addresses', attributes:['address', 'phone_number']},
           {model: wishlist, as: 'userWish', attributes:['produk_id'], include: [
@@ -251,12 +251,12 @@ module.exports = {
         },
         include: [
           {model: seller, as:'store', attributes: ['name', 'address']},
-          {model: account, as: 'account', attributes:['bank_id', 'account_number'], include: [
+          {model: account, as: 'account', attributes:['bank_id', 'account_number', 'account_name'], include: [
             {model: bank, as: 'bankName', attributes:['bank_name']}
           ]},
           {model: role, as: 'user_role', attributes:['role']},
           {model: favorit, as: 'favorit', attributes:['seller_id'], include:[
-            {model: seller, as:'seller_fav', attributes: ['name']}
+            {model: seller, as:'seller_fav', attributes: ['name', 'address']}
           ] },
           {model: address, as: 'addresses', attributes:['address', 'phone_number']},
           {model: wishlist, as: 'userWish', attributes:['produk_id'], include: [
@@ -303,6 +303,43 @@ module.exports = {
       if (edit === 1) {
         response.status = 200;
         response.message = 'User Successfully Edited';
+        response.data = data;
+        helpers.helpers(res, response);
+      }
+      if (edit === 0) {
+        response.status = 404;
+        response.message = 'Data Not Found';
+        helpers.helpers(res, response);
+      }
+    } catch (err) {
+      response.status = 500;
+      response.message = 'Internal Server Error';
+      helpers.helpers(res, response);
+    }
+  }),
+  resetPassword: (async(req, res) => {
+    let response = {};
+    try {
+      const reqtoken = req.query.activated
+      const verify = jwt.verify(reqtoken, process.env.SECRET_KEY)
+      const salt = bcrypt.genSaltSync(10);
+      const data = await user_id.findOne({
+        where: {
+          id: verify.id
+        }
+      });
+      const [edit] = await user_id.update({
+        password: bcrypt.hashSync(req.body.password, salt)
+        },
+        {
+          where: {
+            id: verify.id
+          }
+        }
+      );
+      if (edit === 1) {
+        response.status = 200;
+        response.message = 'Reset Password Success!';
         response.data = data;
         helpers.helpers(res, response);
       }
