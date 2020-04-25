@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     address: DataTypes.STRING,
     desc: DataTypes.STRING,
-    user_id: DataTypes.STRING
+    user_id: DataTypes.STRING,
+    link_seller: DataTypes.STRING,
   }, {});
   seller.associate = function(models) {
     // associations can be defined here
@@ -17,7 +18,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "id",
       as: "store",
       sourceKey: "id"
-    })
+    }),
+    seller.belongsTo(models.favorit_shop, {
+      foreignKey: "id",
+      as: "seller_fav",
+      sourceKey: "id"
+    });
   };
   return seller;
 };

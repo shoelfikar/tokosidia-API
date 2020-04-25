@@ -31,26 +31,31 @@ module.exports = {
     }
   }),
   getProduct: (async(req,res) => {
-    let response = {};
-    try {
+    let response = {};   
+    try {   
       const data = await product.findAll({
-        include: [{
-          model: category,
-          as: 'categoryName',
-          attributes: ['name']
-      },  {
-          model: subCategory,
-          as: 'subCategoryName',
-          attributes: ['name'],
-      },  {
-        model: subSubCategory,
-        as: 'subSubCategoryName',
-        attributes: ['name'],
-      }, {
-        model: seller,
-        as:'seller',
-        attributes: ['name', 'address']
-      }, {
+        include: [
+      //     {
+      //     model: category,
+      //     as: 'categoryName',
+      //     attributes: ['name']
+      // },
+        // {
+      //     model: subCategory,
+      //     as: 'subCategoryName',
+      //     attributes: ['name'],
+      // },  
+      // {
+      //   model: subSubCategory,
+      //   as: 'subSubCategoryName',
+      //   attributes: ['name'],
+      // }, 
+      // {
+      //   model: seller,
+      //   as:'seller',
+      //   attributes: ['name', 'address']
+      // },
+       {
         model: users,
         as:'users',
         attributes: ['fullname', 'email', 'phone_number']}

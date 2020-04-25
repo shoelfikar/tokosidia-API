@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     bank.hasMany(models.bank_account, {
       foreignKey: 'bank_id',
       as: 'bankName',
+      sourceKey: "id"
     })
   };
   return bank;

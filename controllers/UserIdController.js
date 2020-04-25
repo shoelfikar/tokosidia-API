@@ -4,7 +4,14 @@ const bcrypt = require('bcryptjs');
 const nodeMailer = require('nodemailer')
 const user_id = require('../models').user_id;
 const seller = require('../models').seller;
-const mail = require('../helpers/sendMail');
+const account = require('../models').bank_account;
+const bank = require('../models').bank;
+const address = require('../models').address;
+const role = require('../models').role_id;
+const wishlist = require('../models').wishlist;
+const product = require('../models').product;
+const favorit = require('../models').favorit_shop;
+const { Op } = require("sequelize");
 const helpers = require('../helpers/response');
 
 
@@ -73,25 +80,22 @@ module.exports = {
                       height: 40px;
                       line-height: 40px;
                       text-decoration: none;
-                      color: #ffffff;
+                      color: #ffffff !important;
                       font-weight: bold;
                       text-align: center;
                       background: #03ac0e;
                       margin-left: 40%;
                   }
-                  .link a[href]{
-                    color: #ffffff;
-                  }
-                  p a{
+                  .link-1{
                       text-decoration: none;
                   }
               </style>
           </head>
           <body>
               <h2>Verifikasi alamat email kamu</h2>
-              <p class="ml-5">Terima kasih karena telah melakukan registrasi di tokosidia. Username kamu atas nama ${data.fullname}.
+              <p>Terima kasih karena telah melakukan registrasi di tokosidia. Username kamu atas nama ${data.fullname}.
                   verifikasi email anda dengan mengklik link dibawah ini,agar anda dapat menikmati berbelanja barang-barang berkualitas di website kami.
-                  Klik tombol dibawah atau <a href="http://localhost:8000/api/v1/tokosidia/user/auth/?activated=${token}">link ini</a> untuk mengaktifkan akun</p>
+                  Klik tombol dibawah atau <a href="http://localhost:8000/api/v1/tokosidia/user/auth/?activated=${token}" class="link-1">link ini</a> untuk mengaktifkan akun</p>
                   <a href="http://localhost:8000/api/v1/tokosidia/user/auth/?activated=${token}" class="link">Verifikasi Alamat Email</a>
           </body>
           </html>`
@@ -120,7 +124,6 @@ module.exports = {
     }
   }),
   loginUser: (async (req, res) => {
-    
     let response = {};
     try {
       const users = await user_id.findOne({
@@ -161,9 +164,30 @@ module.exports = {
   getUser: (async(req, res) => {
     let response = {};
     try {
+      const search = req.query.search;
+      if (search) {
       const data = await user_id.findAll({
+        where: {
+          [Op.or]: [
+            { fullname: { [Op.substring]: search } }
+          ]
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"]
+        },
         include: [
-          {model: seller, as:'store', attributes: ['name', 'address']}
+          {model: seller, as:'store', attributes: ['name', 'address']},
+          {model: account, as: 'account', attributes:['bank_id', 'account_number','account_name'], include: [
+            {model: bank, as: 'bankName', attributes:['bank_name']}
+          ]},
+          {model: role, as: 'user_role', attributes:['role']},
+          {model: favorit, as: 'favorit', attributes:['seller_id'], include:[
+            {model: seller, as:'seller_fav', attributes: ['name']}
+          ] },
+          {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+          {model: wishlist, as: 'userWish', attributes:['produk_id'], include: [
+            {model: product, as: 'Produk-name', attributes:['name', 'weight', 'description']}
+          ]}
         ]
       });
       if (data.length === 0) {
@@ -172,10 +196,41 @@ module.exports = {
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
-        response.message = 'OK!';
+        response.message = 'Data all user!';
         response.data = data;
         helpers.helpers(res, response);
       }
+    } else {
+      const data = await user_id.findAll({
+        attributes: {
+          exclude: ["createdAt", "updatedAt"]
+        },
+        include: [
+          {model: seller, as:'store', attributes: ['name', 'address']},
+          {model: account, as: 'account', attributes:['bank_id', 'account_number'], include: [
+            {model: bank, as: 'bankName', attributes:['bank_name']}
+          ]},
+          {model: role, as: 'user_role', attributes:['role']},
+          {model: favorit, as: 'favorit', attributes:['seller_id'], include:[
+            {model: seller, as:'seller_fav', attributes: ['name']}
+          ] },
+          {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+          {model: wishlist, as: 'userWish', attributes:['produk_id'], include: [
+            {model: product, as: 'Produk-name', attributes:['name', 'weight', 'description']}
+          ]}
+        ]
+      });
+      if (data.length === 0) {
+        response.status = 404;
+        response.message = 'User List not Found!';
+        helpers.helpers(res, response); 
+      } else {
+        response.status = 200;
+        response.message = 'Data all user!';
+        response.data = data;
+        helpers.helpers(res, response);
+      }
+    }
     } catch (err) {
       response = {};
       response.status = 500;
@@ -194,6 +249,20 @@ module.exports = {
         where: {
           id: userId,
         },
+        include: [
+          {model: seller, as:'store', attributes: ['name', 'address']},
+          {model: account, as: 'account', attributes:['bank_id', 'account_number'], include: [
+            {model: bank, as: 'bankName', attributes:['bank_name']}
+          ]},
+          {model: role, as: 'user_role', attributes:['role']},
+          {model: favorit, as: 'favorit', attributes:['seller_id'], include:[
+            {model: seller, as:'seller_fav', attributes: ['name']}
+          ] },
+          {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+          {model: wishlist, as: 'userWish', attributes:['produk_id'], include: [
+            {model: product, as: 'Produk-name', attributes:['name', 'weight', 'description']}
+          ]}
+        ]
       });
 
       if (!data) {
@@ -202,7 +271,7 @@ module.exports = {
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
-        response.message = 'OK!';
+        response.message = 'Data detail user!';
         response.data = data;
         helpers.helpers(res, response);
       }
@@ -232,7 +301,7 @@ module.exports = {
         },
       });
       if (edit === 1) {
-        response.status = 201;
+        response.status = 200;
         response.message = 'User Successfully Edited';
         response.data = data;
         helpers.helpers(res, response);
@@ -285,6 +354,7 @@ module.exports = {
         id: verify.id,
       },
     });
+    if (data.status == 0) {
     const [edit] = await user_id.update({
           status: 1,
         },
@@ -305,6 +375,11 @@ module.exports = {
         response.data = data;
         helpers.helpers(res, response);
       }
+    } else {
+        response.status = 404;
+        response.message = 'Failed token';
+        helpers.helpers(res, response);
+    }
   } catch (err) {
     response = {};
     response.status = 500;

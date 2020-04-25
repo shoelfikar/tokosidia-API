@@ -28,7 +28,32 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "seller_id",
       as: "store",
       sourceKey: "id"
-    });
+    }),
+    user_id.hasMany(models.bank_account, {
+      foreignKey: "user_id",
+      as: "account",
+      sourceKey: "id"
+    }),
+    user_id.belongsTo(models.role_id, {
+      foreignKey: "role",
+      as: "user_role",
+      sourceKey: "id"
+    }),
+    user_id.hasMany(models.favorit_shop, {
+      foreignKey: "user_id",
+      as: "favorit",
+      sourceKey: "id"
+    }),
+    user_id.hasMany(models.address, {
+      foreignKey: "user_id",
+      as: "addresses",
+      sourceKey: "id"
+    }),
+    user_id.hasMany(models.wishlist, {
+      foreignKey: "user_id",
+      as: "userWish",
+      sourceKey: "id"
+    })
   };
   return user_id;
 };

@@ -6,6 +6,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   wishlist.associate = function(models) {
     // associations can be defined here
+    wishlist.belongsTo(models.user_id, {
+      foreignKey: "id",
+      as: "userWish",
+      sourceKey: "user_id"
+    }),
+    wishlist.hasMany(models.product, {
+      foreignKey: "id",
+      as: "Produk-name",
+      sourceKey: "produk_id"
+    })
   };
   return wishlist;
 };

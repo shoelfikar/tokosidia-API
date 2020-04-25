@@ -1,5 +1,6 @@
 const bankAccount = require('../models').bank_account;
 const bank = require('../models').bank;
+const user = require('../models').user_id;
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -35,6 +36,11 @@ module.exports = {
           model: bank,
           as: 'bankName',
           attributes: ['bank_name']
+        },
+        include: {
+          model: user,
+          as: 'account',
+          attributes: ['fullname']
         }
       });
       if (data.length === 0) {
