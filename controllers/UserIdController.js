@@ -21,22 +21,22 @@ module.exports = {
     let response = {};
     try {
         const salt = bcrypt.genSaltSync(10);
-        const data = await user_id.create({
-        email: req.body.email,
-        fullname: req.body.fullname,
-        password: bcrypt.hashSync(req.body.password, salt),
-        status: 0,
-        image: req.body.image,
-        phone_number: req.body.phone_number,
-        gender: req.body.gender,
-        birthday: req.body.birthday,
-        address: req.body.address,
-        role: 'user',
-        seller_id: 0,
-        wishlist: 0,
-        bank_account: 0,
-        history:0
-      });
+          const data = await user_id.create({
+          email: req.body.email,
+          fullname: req.body.fullname,
+          password: bcrypt.hashSync(req.body.password, salt),
+          status: 0,
+          image: req.body.image,
+          phone_number: req.body.phone_number,
+          gender: req.body.gender,
+          birthday: req.body.birthday,
+          address: req.body.address,
+          role: 1,
+          seller_id: 0,
+          wishlist: 0,
+          bank_account: 0,
+          history:0
+        });
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
@@ -53,7 +53,7 @@ module.exports = {
         })
         const mailFrom = {
           from: process.env.EMAIL,
-          to: 'sulfikardi25@gmail.com',
+          to: data.email,
           subject: 'Saatnya Aktivasi Akun Tokosidia Kamu',
           html: `<!DOCTYPE html>
           <html lang="en">
@@ -96,7 +96,7 @@ module.exports = {
               <p>Terima kasih karena telah melakukan registrasi di tokosidia. Username kamu atas nama ${data.fullname}.
                   verifikasi email anda dengan mengklik link dibawah ini,agar anda dapat menikmati berbelanja barang-barang berkualitas di website kami.
                   Klik tombol dibawah atau <a href="http://localhost:8000/api/v1/tokosidia/user/auth/?activated=${token}" class="link-1">link ini</a> untuk mengaktifkan akun</p>
-                  <a href="http://localhost:8000/api/v1/tokosidia/user/auth/?activated=${token}" class="link">Verifikasi Alamat Email</a>
+                  <a href="${process.env.ACTIVATION + token}" class="link">Verifikasi Alamat Email</a>
           </body>
           </html>`
       }
@@ -127,12 +127,29 @@ module.exports = {
     let response = {};
     try {
       const users = await user_id.findOne({
+        attributes: {
+          exclude: ["createdAt", "updatedAt"]
+        },
+        include: [
+          {model: seller, as:'store', attributes: ['name', 'address']},
+          {model: account, as: 'account', attributes:['bank_id', 'account_number', 'account_name'], include: [
+            {model: bank, as: 'bankName', attributes:['bank_name']}
+          ]},
+          {model: role, as: 'user_role', attributes:['role']},
+          {model: favorit, as: 'favorit', attributes:['seller_id'], include:[
+            {model: seller, as:'seller_fav', attributes: ['name', 'address']}
+          ] },
+          {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+          {model: wishlist, as: 'userWish', attributes:['produk_id'], include: [
+            {model: product, as: 'Produk-name', attributes:['name', 'weight', 'description']}
+          ]}
+        ],
         where: {
           email: req.body.email
         }
       });
       if (!users) {
-        response.status = 404;
+        response.status = 203;
         response.message = 'Wrong Email';
         helpers.helpers(res, response);
       } else if (users) {
@@ -146,7 +163,7 @@ module.exports = {
               response.data = users.dataValues;
               helpers.helpers(res, response);
           } else {
-              response.status = 404;
+              response.status = 203;
               response.message = 'Wrong Password';
               helpers.helpers(res, response);
           }
@@ -401,7 +418,7 @@ module.exports = {
           },
       });
       if (edit === 0) {
-        response.status = 404;
+        response.status = 203;
         response.message = 'Failed Activation';
         helpers.helpers(res, response);
       }
@@ -413,7 +430,7 @@ module.exports = {
         helpers.helpers(res, response);
       }
     } else {
-        response.status = 404;
+        response.status = 203;
         response.message = 'Failed token';
         helpers.helpers(res, response);
     }
