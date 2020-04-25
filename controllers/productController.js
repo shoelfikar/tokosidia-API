@@ -1,9 +1,10 @@
-const product = require('../models').product;
+const { product, image} = require('../models');
 const helpers = require('../helpers/response');
 
 module.exports = {
   insertProduct : (async(req, res) => {
     let response = {};
+    const { files } = req;
     try {
       const body = req.body;
       const data = await product.create(body);
@@ -12,6 +13,12 @@ module.exports = {
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
       } else {
+        files.forEach(file => {
+          image.create({
+            product_id: data.id,
+            image: file.path
+          });
+        });
         response.status = 201;
         response.message = 'Product Has Been Created';
         response.data = data;
