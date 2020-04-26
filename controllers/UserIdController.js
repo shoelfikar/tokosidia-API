@@ -21,6 +21,16 @@ module.exports = {
     let response = {};
     try {
         const salt = bcrypt.genSaltSync(10);
+        const users = await user_id.findOne({
+          where: {
+            email: req.body.email
+          }
+        })
+        if (users) {
+          response.status = 203;
+          response.message = 'Email anda sudah terdaftar';
+          helpers.helpers(res, response);
+        } else {
           const data = await user_id.create({
           email: req.body.email,
           fullname: req.body.fullname,
@@ -95,7 +105,7 @@ module.exports = {
               <h2>Verifikasi alamat email kamu</h2>
               <p>Terima kasih karena telah melakukan registrasi di tokosidia. Username kamu atas nama ${data.fullname}.
                   verifikasi email anda dengan mengklik link dibawah ini,agar anda dapat menikmati berbelanja barang-barang berkualitas di website kami.
-                  Klik tombol dibawah atau <a href="http://localhost:8000/api/v1/tokosidia/user/auth/?activated=${token}" class="link-1">link ini</a> untuk mengaktifkan akun</p>
+                  Klik tombol dibawah atau <a href="${process.env.ACTIVATION + token}" class="link-1">link ini</a> untuk mengaktifkan akun</p>
                   <a href="${process.env.ACTIVATION + token}" class="link">Verifikasi Alamat Email</a>
           </body>
           </html>`
@@ -114,6 +124,7 @@ module.exports = {
           }
       })
       }
+    }
     } catch (err) {
       response = {};
       response.status = 500;
