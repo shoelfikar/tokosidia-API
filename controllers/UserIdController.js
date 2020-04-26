@@ -314,11 +314,14 @@ module.exports = {
     let response = {};
     try {
       const userId = req.params.userId;
-      const body = req.body;
-
+      const salt = bcrypt.genSaltSync(10);
+      // const body = req.body;
+      
       const [edit] = await user_id.update({
+        email: req.body.email,
         fullname: req.body.fullname,
-        image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
+        password: bcrypt.hashSync(req.body.password, salt),
+        // image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
         phone_number: req.body.phone_number,
         gender: req.body.gender,
         birthday: req.body.birthday},
@@ -328,6 +331,7 @@ module.exports = {
           },
         }
       );
+      console.log('here')
       const data = await user_id.findOne({
         where: {
           id: userId,
@@ -353,23 +357,24 @@ module.exports = {
   resetPassword: (async(req, res) => {
     let response = {};
     try {
-      const reqtoken = req.query.activated
-      const verify = jwt.verify(reqtoken, process.env.SECRET_KEY)
+      // const reqtoken = req.query.activated
+      // const verify = jwt.verify(reqtoken, process.env.SECRET_KEY)
+      const userId = req.params.userId;
       const salt = bcrypt.genSaltSync(10);
-      const data = await user_id.findOne({
-        where: {
-          id: verify.id
-        }
-      });
       const [edit] = await user_id.update({
         password: bcrypt.hashSync(req.body.password, salt)
         },
         {
           where: {
-            id: verify.id
+            id: userId
           }
         }
       );
+      const data = await user_id.findOne({
+        where: {
+          id: userId
+        }
+      });
       if (edit === 1) {
         response.status = 200;
         response.message = 'Reset Password Success!';

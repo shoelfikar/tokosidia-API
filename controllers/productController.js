@@ -133,6 +133,13 @@ module.exports = {
         where: {
           id: productId,
         },
+        include: [
+          {
+            model: imageDetail,
+            as: 'images',
+            attributes: ['image'],
+          }
+        ]
         // include: [
         //   {model: user_id, as:'users', attributes: ['email', 'fullname'], include: [
         //     {model: address, as: 'addresses', attributes:['address', 'phone_number']},

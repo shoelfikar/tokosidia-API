@@ -1,4 +1,6 @@
 const seller = require('../models').seller;
+const product = require('../models').product;
+const user_id = require('../models').user_id;
 const helpers = require('../helpers/response');
 
 
@@ -29,7 +31,12 @@ module.exports = {
   getSeller: (async(req,res) => {
     let response = {};
     try {
-      const data = await seller.findAll({});
+      const data = await seller.findAll({
+        include: [
+          {model: product, as: 'myProduct', attributes: ['name', 'description']},
+          // {model: seller, as:'store', attributes: ['name', 'address']}
+        ]
+      });
       if (data.length === 0) {
         response.status = 404;
         response.message = 'Seller List not Found!';
