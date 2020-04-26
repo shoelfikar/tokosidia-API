@@ -18,6 +18,7 @@ const subCategory = require('./subCategory');
 const subSubCategory = require('./subSubCategory');
 const order = require('./order');
 const orderdetail = require('./orderDetail');
+const cart = require('./cart');
 
 router
   .use('/user', userId)
@@ -37,6 +38,7 @@ router
   .use('/subsubcategory', subSubCategory)
   .use('/order', order)
   .use('/orderdetail', orderdetail)
+  .use('/cart', cart)
   .get('/', function(req,res) {
     res.send({
       message: 'Welcome to Tokodidia API',

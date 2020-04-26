@@ -72,7 +72,7 @@ module.exports = {
       });
       if (!data) {
         response.status = 404;
-        response.message = 'Address Detail not Found!';
+        response.message = 'Category Detail not Found!';
         helpers.helpers(res, response);  
       } else {
         response.status = 200;

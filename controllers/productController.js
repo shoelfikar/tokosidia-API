@@ -53,24 +53,29 @@ module.exports = {
       const limit = setLimit + setOffset;
       const path = `http://${req.get('host') + req.baseUrl}?page`;
       const { search } = req.query;
-      const include = [{
-        model: category,
-        as: 'categoryName',
-        attributes: ['name']
-    },  {
-        model: subCategory,
-        as: 'subCategoryName',
-        attributes: ['name'],
-    },  {
-      model: subSubCategory,
-      as: 'subSubCategoryName',
-      attributes: ['name'],
-    }];
-    let sortType = req.query.sort_type || '';
-    sortType = sortType.toUpperCase() || 'ASC';
-    if (sort !== undefined) {
-      param.order = [[sort, sortType]];
-    }
+      const include = [
+        {
+          model: user_id,
+          as: 'username',
+          attributes: ['fullname'],
+        }, {
+          model: category,
+          as: 'categoryName',
+          attributes: ['name']
+        }, {
+          model: subCategory,
+          as: 'subCategoryName',
+          attributes: ['name'],
+        }, {
+          model: subSubCategory,
+          as: 'subSubCategoryName',
+          attributes: ['name'],
+        }];
+      let sortType = req.query.sort_type || '';
+      sortType = sortType.toUpperCase() || 'ASC';
+      if (sort !== undefined) {
+        param.order = [[sort, sortType]];
+      }
       param.offset = offset;
       param.limit = limit;
       param.include = include;
