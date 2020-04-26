@@ -2,7 +2,7 @@ const category = require('../models').category;
 const subCategory = require('../models').subCategory;
 const subSubCategory = require('../models').subSubCategory;
 const user_id = require ('../models').user_id;
-const { product, image} = require('../models');
+const { product, imageDetail} = require('../models');
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     const { files } = req;
     try {
       const input = req.body;
-      input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+      // input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
       const data = await product.create(input);
       if (data === undefined) {
         response.status = 404;
@@ -19,9 +19,11 @@ module.exports = {
         helpers.helpers(res, response);
       } else {
         files.forEach(file => {
-          image.create({
+          const url = `http://${req.get('host')}/${file.path.replace(/\\/g, '/')}`;
+          console.log(url);
+          imageDetail.create({
             product_id: data.id,
-            image: file.path
+            image: url
           });
         });
         response.status = 201;
