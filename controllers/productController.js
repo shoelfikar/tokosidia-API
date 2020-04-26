@@ -2,7 +2,8 @@
 // const subCategory = require('../models').subCategory;
 // const subSubCategory = require('../models').subSubCategory;
 // const user_id = require ('../models').user_id;
-const { product, imageDetail, category, subCategory, subSubCategory, user_id } = require('../models');
+const { product, imageDetail, category, subCategory,
+  subSubCategory, user_id, condition, seller} = require('../models');
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -74,7 +75,18 @@ module.exports = {
           model: imageDetail,
           as: 'images',
           attributes: ['image'],
-        }];
+        },
+        {
+          model: condition,
+          as: 'kondisi_barang',
+          attributes: ['status'],
+        },
+        {
+          model: seller,
+          as: 'toko',
+          attributes: ['name', 'address'],
+        }
+      ];
       let sortType = req.query.sort_type || '';
       sortType = sortType.toUpperCase() || 'ASC';
       if (sort !== undefined) {

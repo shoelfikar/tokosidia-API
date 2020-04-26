@@ -47,6 +47,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'product_id',
         as: 'images',
     });
+
+    product.belongsTo(models.condition,
+      {
+        foreignKey: 'condition',
+        as: 'kondisi_barang' 
+    });
+
+    product.belongsTo(models.seller,
+      {
+        foreignKey: 'seller_id',
+        as: 'toko' 
+    });
     
   };
   return product;
