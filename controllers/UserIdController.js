@@ -35,15 +35,15 @@ module.exports = {
         email: req.body.email,
         fullname: req.body.fullname,
         password: bcrypt.hashSync(req.body.password, salt),
-        status: req.body.status,
+        status: 0,
         image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
-        phone_number: req.body.phone_number,
-        address: req.body.address,
-        role: req.body.role,
-        seller_id: req.body.seller_id,
-        wishlist: req.body.wishlist,
-        bank_account: req.body.bank_account,
-        history:req.body.history
+        phone_number: 0,
+        address: 0,
+        role: 1,
+        seller_id: 0,
+        wishlist: 0,
+        bank_account: 0,
+        history:0
       });
       if (data === undefined) {
         response.status = 404;
@@ -316,11 +316,18 @@ module.exports = {
       const userId = req.params.userId;
       const body = req.body;
 
-      const [edit] = await user_id.update(body, {
-        where: {
-          id: userId,
-        },
-      });
+      const [edit] = await user_id.update({
+        fullname: req.body.fullname,
+        image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
+        phone_number: req.body.phone_number,
+        gender: req.body.gender,
+        birthday: req.body.birthday},
+        {
+          where: {
+            id: userId,
+          },
+        }
+      );
       const data = await user_id.findOne({
         where: {
           id: userId,

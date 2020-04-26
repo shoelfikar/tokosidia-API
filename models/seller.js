@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   seller.associate = function(models) {
     // associations can be defined here
-    seller.belongsTo(models.product, {
-      foreignKey: "id",
+    seller.hasMany(models.product, {
+      foreignKey: "seller_id",
       as: "seller",
       sourceKey: "id"
     }),

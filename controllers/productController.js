@@ -3,6 +3,8 @@ const category = require('../models').category;
 const subCategory = require('../models').subCategory;
 const subSubCategory = require('../models').subSubCategory;
 const user_id = require ('../models').user_id;
+const address = require('../models').address;
+const seller = require('../models').seller;
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -11,6 +13,7 @@ module.exports = {
     try {
       const input = req.body;
       input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+      console.log('here')
       const data = await product.create(input);
       if (data === undefined) {
         response.status = 404;
@@ -55,7 +58,11 @@ module.exports = {
       model: subSubCategory,
       as: 'subSubCategoryName',
       attributes: ['name'],
-    }];
+    },
+    {model: user_id, as:'users', attributes: ['email', 'fullname'], include: [
+      {model: address, as: 'addresses', attributes:['address', 'phone_number']}
+    ]}
+    ];
     let sortType = req.query.sort_type || '';
     sortType = sortType.toUpperCase() || 'ASC';
     if (sort !== undefined) {
@@ -110,6 +117,13 @@ module.exports = {
         where: {
           id: productId,
         },
+        include: [
+          {model: user_id, as:'users', attributes: ['email', 'fullname'], include: [
+            {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+            {model: seller, as:'store', attributes: ['name', 'address']}
+          ]},
+          {model: seller, as:'seller', attributes: ['name', 'address'],}
+        ]
       });
       if (!data) {
         response.status = 404;
