@@ -71,6 +71,16 @@ module.exports = {
         where: {
           id: accountId,
         },
+        include: {
+          model: bank,
+          as: 'bankName',
+          attributes: ['bank_name']
+        },
+        include: {
+          model: user,
+          as: 'account',
+          attributes: ['fullname']
+        }
       });
 
       if (!data) {

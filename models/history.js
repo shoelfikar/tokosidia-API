@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   history.associate = function(models) {
     // associations can be defined here
+    history.hasMany(models.user_id, {
+      foreignKey: "id",
+      as: "myhistory",
+      sourceKey: "user_id"
+    })
   };
   return history;
 };

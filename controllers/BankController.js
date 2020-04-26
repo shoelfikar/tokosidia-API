@@ -35,7 +35,7 @@ module.exports = {
         include: {
           model: bank_account,
           as: 'bankName',
-          attributes: ['acoount_number']
+          attributes: ['account_number', 'account_name']
         }
       });
       if (data.length === 0) {

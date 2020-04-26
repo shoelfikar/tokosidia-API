@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       as: "users",
       sourceKey: "id"
     }),
-    user_id.belongsTo(models.seller, {
-      foreignKey: "id",
+    user_id.hasMany(models.seller, {
+      foreignKey: "user_id",
       as: "store",
       sourceKey: "id"
     }),
@@ -52,6 +52,11 @@ module.exports = (sequelize, DataTypes) => {
     user_id.hasMany(models.wishlist, {
       foreignKey: "user_id",
       as: "userWish",
+      sourceKey: "id"
+    }),
+    user_id.hasMany(models.history, {
+      foreignKey: "user_id",
+      as: "myhistory",
       sourceKey: "id"
     })
     // user_id.belongsTo(models.seller, {

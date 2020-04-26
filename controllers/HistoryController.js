@@ -1,4 +1,8 @@
 const history = require('../models').history;
+const users = require('../models').user_id;
+const address = require('../models').address;
+const account = require('../models').bank_account;
+const bank = require('../models').bank;
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -28,7 +32,12 @@ module.exports = {
   getHistory: (async(req, res) => {
     let response = {};
     try {
-      const data = await history.findAll({});
+      const data = await history.findAll({
+        include: [
+          {model: users, as:'myhistory', attributes: ['email', 'fullname',], include: [
+            {model: address, as: 'addresses', attributes:['address', 'phone_number']}
+          ]}]
+      });
       if (data.length === 0) {
         response.status = 404;
         response.message = 'History List not Found!';
@@ -57,6 +66,13 @@ module.exports = {
         where: {
           id: historyId,
         },
+        include: [
+          {model: users, as:'myhistory', attributes: ['email', 'fullname',], include: [
+            {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+            {model: account, as: 'account', attributes:['bank_id', 'account_number', 'account_name'], include: [
+              {model: bank, as: 'bankName', attributes:['bank_name']}
+            ]}
+          ]}]
       });
 
       if (!data) {

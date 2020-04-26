@@ -48,7 +48,7 @@ module.exports = {
         history:0
       });
       if (data === undefined) {
-        response.status = 404;
+        response.status = 203;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
       } else {
@@ -219,7 +219,7 @@ module.exports = {
         ]
       });
       if (data.length === 0) {
-        response.status = 404;
+        response.status = 203;
         response.message = 'User List not Found!';
         helpers.helpers(res, response); 
       } else {
@@ -249,7 +249,7 @@ module.exports = {
         ]
       });
       if (data.length === 0) {
-        response.status = 404;
+        response.status = 203;
         response.message = 'User List not Found!';
         helpers.helpers(res, response); 
       } else {
@@ -294,7 +294,7 @@ module.exports = {
       });
 
       if (!data) {
-        response.status = 404;
+        response.status = 203;
         response.message = 'User Detail not Found!';
         helpers.helpers(res, response); 
       } else {
@@ -344,7 +344,7 @@ module.exports = {
         helpers.helpers(res, response);
       }
       if (edit === 0) {
-        response.status = 404;
+        response.status = 203;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
       }
@@ -383,6 +383,41 @@ module.exports = {
       }
       if (edit === 0) {
         response.status = 404;
+        response.message = 'Data Not Found';
+        helpers.helpers(res, response);
+      }
+    } catch (err) {
+      response.status = 500;
+      response.message = 'Internal Server Error';
+      helpers.helpers(res, response);
+    }
+  }),
+
+  uploadImage: (async(req, res) => {
+    let response = {};
+    try {
+      const userId = req.params.userId;
+      const [edit] = await user_id.update({
+        image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`},
+        {
+          where: {
+            id: userId
+          }
+        }
+      );
+      const data = await user_id.findOne({
+        where: {
+          id: userId
+        }
+      });
+      if (edit === 1) {
+        response.status = 200;
+        response.message = 'Profil Successfully Edited!';
+        response.data = data;
+        helpers.helpers(res, response);
+      }
+      if (edit === 0) {
+        response.status = 203;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
       }

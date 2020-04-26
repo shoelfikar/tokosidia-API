@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
   bank_account.associate = function(models) {
     // associations can be defined here
     bank_account.belongsTo(models.bank, {
-      foreignKey: "id",
+      foreignKey: "bank_id",
       as:'bankName',
-      sourceKey: "bank_id"
+      sourceKey: "id"
     }),
-    bank_account.belongsTo(models.user_id, {
+    bank_account.hasMany(models.user_id, {
       foreignKey: "id",
       as:'account',
       sourceKey: "user_id"

@@ -33,7 +33,7 @@ module.exports = {
     try {
       const data = await seller.findAll({
         include: [
-          {model: product, as: 'myProduct', attributes: ['name', 'description']},
+          {model: product, as: 'myProduct', attributes: ['id', 'name', 'description', 'price', 'stock_product', 'rating', 'weight', 'condition']},
           {model: user_id, as:'store', attributes: ['fullname', 'email']}
         ]
       });
@@ -65,7 +65,7 @@ module.exports = {
           id: sellerId,
         },
         include: [
-          {model: product, as: 'myProduct', attributes: ['name', 'description']},
+          {model: product, as: 'myProduct', attributes: ['id', 'name', 'description', 'price', 'stock_product', 'rating', 'weight', 'condition']},
           {model: user_id, as:'store', attributes: ['fullname', 'email']}
         ]
       });

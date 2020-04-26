@@ -14,10 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       as: "myProduct",
       sourceKey: "id"
     }),
-    seller.belongsTo(models.user_id, {
-      foreignKey: "user_id",
+    seller.hasMany(models.user_id, {
+      foreignKey: "id",
       as: "store",
-      sourceKey: "id"
+      sourceKey: "user_id"
     }),
     seller.belongsTo(models.favorit_shop, {
       foreignKey: "id",
