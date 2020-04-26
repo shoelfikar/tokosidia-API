@@ -20,33 +20,31 @@ module.exports = {
   insertUser: (async (req, res) => {
     let response = {};
     try {
-        const salt = bcrypt.genSaltSync(10);
-        const users = await user_id.findOne({
-          where: {
-            email: req.body.email
-          }
-        })
-        if (users) {
-          response.status = 203;
-          response.message = 'Email anda sudah terdaftar';
-          helpers.helpers(res, response);
-        } else {
-          const data = await user_id.create({
-          email: req.body.email,
-          fullname: req.body.fullname,
-          password: bcrypt.hashSync(req.body.password, salt),
-          status: 0,
-          image: req.body.image,
-          phone_number: req.body.phone_number,
-          gender: req.body.gender,
-          birthday: req.body.birthday,
-          address: req.body.address,
-          role: 1,
-          seller_id: 0,
-          wishlist: 0,
-          bank_account: 0,
-          history:0
-        });
+      const salt = bcrypt.genSaltSync(10);
+      const users = await user_id.findOne({
+        where: {
+          email: req.body.email
+        }
+      })
+      if (users) {
+        response.status = 203;
+        response.message = 'Email anda sudah terdaftar';
+        helpers.helpers(res, response);
+      } else {
+      const data = await user_id.create({
+        email: req.body.email,
+        fullname: req.body.fullname,
+        password: bcrypt.hashSync(req.body.password, salt),
+        status: req.body.status,
+        image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
+        phone_number: req.body.phone_number,
+        address: req.body.address,
+        role: req.body.role,
+        seller_id: req.body.seller_id,
+        wishlist: req.body.wishlist,
+        bank_account: req.body.bank_account,
+        history:req.body.history
+      });
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
