@@ -1,14 +1,12 @@
-const category = require('../models').category;
-const subCategory = require('../models').subCategory;
-const subSubCategory = require('../models').subSubCategory;
+const orderDetail = require('../models').order_detail;
 const helpers = require('../helpers/response');
 
 module.exports = {
-  insertCategory: (async(req, res) => {
+  insertOrderDetail: (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await category.create(body);
+      const data = await orderDetail.create(body);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
@@ -27,25 +25,13 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-
-  getCategory: (async(req, res) => {
+  getOrderDetail: (async(req, res) => {
     let response = {};
     try {
-      const data = await category.findAll({
-        include: {
-          model: subCategory,
-          as: 'SubCategory',
-          attributes: ['name'],
-          include: [{
-            model: subSubCategory,
-            as: 'SubSubCategory',
-            attributes: ['name']
-          }],
-        }
-      })
+      const data = await orderDetail.findAll({});
       if (data.length === 0) {
         response.status = 404;
-        response.message = 'Category List not Found!';
+        response.message = 'Order Detail not Found!';
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
@@ -61,19 +47,19 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-  detailCategory: (async(req, res) => {
+  detailOrderDetail: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
-      const data = await category.findOne({
+      const orderDetailId = req.params.orderDetailId;
+      const data = await orderDetail.findOne({
         where: {
-          id: categoryId,
+          id: orderDetailId,
         },
       });
       if (!data) {
         response.status = 404;
-        response.message = 'Category Detail not Found!';
-        helpers.helpers(res, response);  
+        response.message = 'Address Detail not Found!';
+        helpers.helpers(res, response); 
       } else {
         response.status = 200;
         response.message = 'OK!';
@@ -86,32 +72,35 @@ module.exports = {
       response.message = 'Internal Server Error';
       response.err = err;
       helpers.helpers(res, response);
-    };
+    }
   }),
-  updateCategory: (async(req, res) => {
+  updateOrderDetail: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
+      const orderDetailId = req.params.orderDetailId;
       const body = req.body;
 
-      const [edit] = await category.update(body, {
+      const [edit] = await orderDetail.update(body, {
         where: {
-          id: categoryId,
+          id: orderDetailId,
         },
       });
-      const data = await category.findOne({
+
+      const data = await orderDetail.findOne({
         where: {
-          id: categoryId,
+          id: orderDetailId,
         },
       });
-      if (edit === 1) {
-        response.status = 201;
-        response.message = 'Category Successfully Edited';
-        response.data = data;
-        helpers.helpers(res, response);
-      } if (edit === 0) {
+
+      if (edit === 0) {
         response.status = 404;
         response.message = 'Data Not Found';
+        helpers.helpers(res, response);
+      }
+      if (edit === 1){
+        response.status = 201;
+        response.message = 'Order Successfully Edited';
+        response.data = data;
         helpers.helpers(res, response);
       }
     } catch (err) {
@@ -120,25 +109,25 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-  deleteCategory: (async(req, res) => {
+  deleteOrderDetail: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
-      const data = await category.destroy({
+      const orderDetailId = req.params.orderDetailId;
+      const data = await orderDetail.destroy({
         where: {
-          id: categoryId,
+          id: orderDetailId,
         },
       });
       if (!data) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
-      } if(data) {
+      } else {
         response.status = 200;
         response.message = 'Successfully Deleted';
         helpers.helpers(res, response);
       }
-    } catch (err) {
+    } catch(err) {
       response = {};
       response.status = 500;
       response.message = 'Internal Server Error';

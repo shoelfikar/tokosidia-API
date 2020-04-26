@@ -1,14 +1,12 @@
-const category = require('../models').category;
-const subCategory = require('../models').subCategory;
-const subSubCategory = require('../models').subSubCategory;
+const order = require('../models').order;
 const helpers = require('../helpers/response');
 
 module.exports = {
-  insertCategory: (async(req, res) => {
+  insertOrder: (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await category.create(body);
+      const data = await order.create(body);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
@@ -27,25 +25,13 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-
-  getCategory: (async(req, res) => {
+  getOrder: (async(req, res) => {
     let response = {};
     try {
-      const data = await category.findAll({
-        include: {
-          model: subCategory,
-          as: 'SubCategory',
-          attributes: ['name'],
-          include: [{
-            model: subSubCategory,
-            as: 'SubSubCategory',
-            attributes: ['name']
-          }],
-        }
-      })
+      const data = await order.findAll({});
       if (data.length === 0) {
         response.status = 404;
-        response.message = 'Category List not Found!';
+        response.message = 'Order List not Found!';
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
@@ -61,19 +47,19 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-  detailCategory: (async(req, res) => {
+  detailOrder: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
-      const data = await category.findOne({
+      const orderId = req.params.orderId;
+      const data = await order.findOne({
         where: {
-          id: categoryId,
+          id: orderId,
         },
       });
       if (!data) {
         response.status = 404;
-        response.message = 'Category Detail not Found!';
-        helpers.helpers(res, response);  
+        response.message = 'Address Detail not Found!';
+        helpers.helpers(res, response); 
       } else {
         response.status = 200;
         response.message = 'OK!';
@@ -86,27 +72,29 @@ module.exports = {
       response.message = 'Internal Server Error';
       response.err = err;
       helpers.helpers(res, response);
-    };
+    }
   }),
-  updateCategory: (async(req, res) => {
+  updateOrder: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
+      const orderId = req.params.orderId;
       const body = req.body;
 
-      const [edit] = await category.update(body, {
+      const [edit] = await order.update(body, {
         where: {
-          id: categoryId,
+          id: orderId,
         },
       });
-      const data = await category.findOne({
+
+      const data = await order.findOne({
         where: {
-          id: categoryId,
+          id: orderId,
         },
       });
+
       if (edit === 1) {
         response.status = 201;
-        response.message = 'Category Successfully Edited';
+        response.message = 'Order Successfully Edited';
         response.data = data;
         helpers.helpers(res, response);
       } if (edit === 0) {
@@ -120,25 +108,25 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-  deleteCategory: (async(req, res) => {
+  deleteOrder: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
-      const data = await category.destroy({
+      const orderId = req.params.orderId;
+      const data = await order.destroy({
         where: {
-          id: categoryId,
+          id: orderId,
         },
       });
       if (!data) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
-      } if(data) {
+      } else {
         response.status = 200;
         response.message = 'Successfully Deleted';
         helpers.helpers(res, response);
       }
-    } catch (err) {
+    } catch (err){
       response = {};
       response.status = 500;
       response.message = 'Internal Server Error';

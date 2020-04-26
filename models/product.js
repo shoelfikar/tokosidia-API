@@ -21,19 +21,20 @@ module.exports = (sequelize, DataTypes) => {
     
     product.belongsTo(models.category,
       {
-        foreignKey: 'id',
+        foreignKey: 'category',
         as: 'categoryName'
     });
 
     product.belongsTo(models.subCategory,
       {
-        foreignKey: 'id',
-        as: 'subCategoryName'
+        foreignKey: 'subCategory',
+        as: 'subCategoryName',
+        // sourceKey: subCategory
     });
     
     product.belongsTo(models.subSubCategory,
       {
-        foreignKey: 'id',
+        foreignKey: 'subSubCategory',
         as: 'subSubCategoryName'
     });
     product.belongsTo(models.seller, {
@@ -41,16 +42,27 @@ module.exports = (sequelize, DataTypes) => {
       as: "seller",
       sourceKey: "seller_id"
     });
-    product.belongsTo(models.user_id, {
-      foreignKey: "user_id",
-      as: "users",
-      sourceKey: "id"
-    })
+    // product.belongsTo(models.user_id, {
+    //   foreignKey: "user_id",
+    //   as: "users",
+    //   sourceKey: "id"
+    // })
     // product.belongsTo(models.wishlist, {
     //   foreignKey: "produk_id",
     //   as: "Produk-name",
     //   sourceKey: "id"
     // })
+    product.belongsTo(models.user_id,
+      {
+        foreignKey: 'user_id',
+        as: 'username' 
+    });
+
+    product.hasMany(models.imageDetail,
+      {
+        foreignKey: 'product_id',
+        as: 'images',
+    });
   };
   return product;
 };

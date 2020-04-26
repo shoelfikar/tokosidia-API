@@ -1,14 +1,12 @@
-const category = require('../models').category;
-const subCategory = require('../models').subCategory;
-const subSubCategory = require('../models').subSubCategory;
+const cart = require('../models').cart;
 const helpers = require('../helpers/response');
 
 module.exports = {
-  insertCategory: (async(req, res) => {
+  insertCart : (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await category.create(body);
+      const data = await cart.create(body);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
@@ -28,24 +26,14 @@ module.exports = {
     }
   }),
 
-  getCategory: (async(req, res) => {
+  getCart: (async(req, res) => {
     let response = {};
     try {
-      const data = await category.findAll({
-        include: {
-          model: subCategory,
-          as: 'SubCategory',
-          attributes: ['name'],
-          include: [{
-            model: subSubCategory,
-            as: 'SubSubCategory',
-            attributes: ['name']
-          }],
-        }
-      })
+      const data = await cart.findAll({
+      });
       if (data.length === 0) {
         response.status = 404;
-        response.message = 'Category List not Found!';
+        response.message = 'Cart List not Found!';
         helpers.helpers(res, response); 
       } else {
         response.status = 200;
@@ -61,49 +49,51 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-  detailCategory: (async(req, res) => {
+
+  detailCart : (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
-      const data = await category.findOne({
+      const cartId = req.params.cartId;
+      const data = await cart.findOne({
         where: {
-          id: categoryId,
+          id:cartId,
         },
       });
       if (!data) {
         response.status = 404;
-        response.message = 'Category Detail not Found!';
-        helpers.helpers(res, response);  
+        response.message = 'Cart Detail not Found!';
+        helpers.helpers(res, response);    
       } else {
         response.status = 200;
         response.message = 'OK!';
         response.data = data;
         helpers.helpers(res, response);
       }
-    } catch (err) {
+    } catch(err) {
       response = {};
       response.status = 500;
       response.message = 'Internal Server Error';
       response.err = err;
       helpers.helpers(res, response);
-    };
+    }
   }),
-  updateCategory: (async(req, res) => {
+  updateCart: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
+      const cartId = req.params.cartId;
       const body = req.body;
+      const [edit] = await cart.update(body, {
+        where: {
+          id: cartId,
+        }
+      });
 
-      const [edit] = await category.update(body, {
+      const data = await cart.findOne({
         where: {
-          id: categoryId,
+          id: cartId,
         },
       });
-      const data = await category.findOne({
-        where: {
-          id: categoryId,
-        },
-      });
+
       if (edit === 1) {
         response.status = 201;
         response.message = 'Category Successfully Edited';
@@ -120,25 +110,26 @@ module.exports = {
       helpers.helpers(res, response);
     }
   }),
-  deleteCategory: (async(req, res) => {
+
+  deleteCart: (async(req, res) => {
     let response = {};
     try {
-      const categoryId = req.params.categoryId;
-      const data = await category.destroy({
+      const cartId = req.params.cartId;
+      const data = await cart.destroy({
         where: {
-          id: categoryId,
+          id: cartId,
         },
       });
       if (!data) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
-      } if(data) {
+      } if (data) {
         response.status = 200;
         response.message = 'Successfully Deleted';
         helpers.helpers(res, response);
       }
-    } catch (err) {
+    } catch(err) {
       response = {};
       response.status = 500;
       response.message = 'Internal Server Error';

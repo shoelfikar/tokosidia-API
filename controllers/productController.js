@@ -1,25 +1,36 @@
-const product = require('../models').product;
-const category = require('../models').category;
-const subCategory = require('../models').subCategory;
-const subSubCategory = require('../models').subSubCategory;
-const user_id = require ('../models').user_id;
-const address = require('../models').address;
-const seller = require('../models').seller;
+// const product = require('../models').product;
+// const category = require('../models').category;
+// const subCategory = require('../models').subCategory;
+// const subSubCategory = require('../models').subSubCategory;
+// const user_id = require ('../models').user_id;
+// const address = require('../models').address;
+// const seller = require('../models').seller;
+const { product, imageDetail, category, subCategory, subSubCategory, user_id } = require('../models');
 const helpers = require('../helpers/response');
 
 module.exports = {
   insertProduct : (async(req, res) => {
     let response = {};
+    const { files } = req;
     try {
       const input = req.body;
-      input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+      // input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
       console.log('here')
+      // input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
       const data = await product.create(input);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
       } else {
+        files.forEach(file => {
+          const url = `http://${req.get('host')}/${file.path.replace(/\\/g, '/')}`;
+          console.log(url);
+          imageDetail.create({
+            product_id: data.id,
+            image: url
+          });
+        });
         response.status = 201;
         response.message = 'Product Has Been Created';
         response.data = data;
@@ -46,28 +57,33 @@ module.exports = {
       const limit = setLimit + setOffset;
       const path = `http://${req.get('host') + req.baseUrl}?page`;
       const { search } = req.query;
-      const include = [{
-        model: category,
-        as: 'categoryName',
-        attributes: ['name']
-    },  {
-        model: subCategory,
-        as: 'subCategoryName',
-        attributes: ['name'],
-    },  {
-      model: subSubCategory,
-      as: 'subSubCategoryName',
-      attributes: ['name'],
-    },
-    {model: user_id, as:'users', attributes: ['email', 'fullname'], include: [
-      {model: address, as: 'addresses', attributes:['address', 'phone_number']}
-    ]}
-    ];
-    let sortType = req.query.sort_type || '';
-    sortType = sortType.toUpperCase() || 'ASC';
-    if (sort !== undefined) {
-      param.order = [[sort, sortType]];
-    }
+      const include = [
+        {
+          model: user_id,
+          as: 'username',
+          attributes: ['fullname'],
+        }, {
+          model: category,
+          as: 'categoryName',
+          attributes: ['name']
+        }, {
+          model: subCategory,
+          as: 'subCategoryName',
+          attributes: ['name'],
+        }, {
+          model: subSubCategory,
+          as: 'subSubCategoryName',
+          attributes: ['name'],
+        }, {
+          model: imageDetail,
+          as: 'images',
+          attributes: ['image'],
+        }];
+      let sortType = req.query.sort_type || '';
+      sortType = sortType.toUpperCase() || 'ASC';
+      if (sort !== undefined) {
+        param.order = [[sort, sortType]];
+      }
       param.offset = offset;
       param.limit = limit;
       param.include = include;
@@ -117,13 +133,13 @@ module.exports = {
         where: {
           id: productId,
         },
-        include: [
-          {model: user_id, as:'users', attributes: ['email', 'fullname'], include: [
-            {model: address, as: 'addresses', attributes:['address', 'phone_number']},
-            {model: seller, as:'store', attributes: ['name', 'address']}
-          ]},
-          {model: seller, as:'seller', attributes: ['name', 'address'],}
-        ]
+        // include: [
+        //   {model: user_id, as:'users', attributes: ['email', 'fullname'], include: [
+        //     {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+        //     {model: seller, as:'store', attributes: ['name', 'address']}
+        //   ]},
+        //   {model: seller, as:'seller', attributes: ['name', 'address'],}
+        // ]
       });
       if (!data) {
         response.status = 404;
