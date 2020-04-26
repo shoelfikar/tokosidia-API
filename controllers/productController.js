@@ -1,8 +1,8 @@
-const category = require('../models').category;
-const subCategory = require('../models').subCategory;
-const subSubCategory = require('../models').subSubCategory;
-const user_id = require ('../models').user_id;
-const { product, imageDetail} = require('../models');
+// const category = require('../models').category;
+// const subCategory = require('../models').subCategory;
+// const subSubCategory = require('../models').subSubCategory;
+// const user_id = require ('../models').user_id;
+const { product, imageDetail, category, subCategory, subSubCategory, user_id } = require('../models');
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -70,6 +70,10 @@ module.exports = {
           model: subSubCategory,
           as: 'subSubCategoryName',
           attributes: ['name'],
+        }, {
+          model: imageDetail,
+          as: 'images',
+          attributes: ['image'],
         }];
       let sortType = req.query.sort_type || '';
       sortType = sortType.toUpperCase() || 'ASC';

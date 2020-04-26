@@ -40,7 +40,14 @@ module.exports = (sequelize, DataTypes) => {
       {
         foreignKey: 'user_id',
         as: 'username' 
-      })
+    });
+
+    product.hasMany(models.imageDetail,
+      {
+        foreignKey: 'product_id',
+        as: 'images',
+    });
+    
   };
   return product;
 };
