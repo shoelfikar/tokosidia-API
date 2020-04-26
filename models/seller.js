@@ -15,15 +15,20 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: "id"
     }),
     seller.belongsTo(models.user_id, {
-      foreignKey: "id",
+      foreignKey: "user_id",
       as: "store",
-      sourceKey: "user_id"
+      sourceKey: "id"
     }),
     seller.belongsTo(models.favorit_shop, {
       foreignKey: "id",
       as: "seller_fav",
       sourceKey: "id"
-    });
+    })
+    // seller.hasOne(models.user_id, {
+    //   foreignKey: "id",
+    //   as: "pemilik",
+      // sourceKey: "user_id"
+    // })
   };
   return seller;
 };

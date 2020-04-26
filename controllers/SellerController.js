@@ -34,7 +34,7 @@ module.exports = {
       const data = await seller.findAll({
         include: [
           {model: product, as: 'myProduct', attributes: ['name', 'description']},
-          // {model: seller, as:'store', attributes: ['name', 'address']}
+          {model: user_id, as:'store', attributes: ['fullname', 'email']}
         ]
       });
       if (data.length === 0) {
@@ -64,6 +64,10 @@ module.exports = {
         where: {
           id: sellerId,
         },
+        include: [
+          {model: product, as: 'myProduct', attributes: ['name', 'description']},
+          {model: user_id, as:'store', attributes: ['fullname', 'email']}
+        ]
       });
       
       if (!data) {

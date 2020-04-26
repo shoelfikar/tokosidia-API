@@ -36,8 +36,10 @@ module.exports = {
         fullname: req.body.fullname,
         password: bcrypt.hashSync(req.body.password, salt),
         status: 0,
-        image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
+        // image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
         phone_number: 0,
+        gender:0,
+        // birthday:0,
         address: 0,
         role: 1,
         seller_id: 0,
@@ -314,13 +316,11 @@ module.exports = {
     let response = {};
     try {
       const userId = req.params.userId;
-      const salt = bcrypt.genSaltSync(10);
+      // const salt = bcrypt.genSaltSync(10);
       // const body = req.body;
-      
       const [edit] = await user_id.update({
         email: req.body.email,
         fullname: req.body.fullname,
-        password: bcrypt.hashSync(req.body.password, salt),
         // image: `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`,
         phone_number: req.body.phone_number,
         gender: req.body.gender,

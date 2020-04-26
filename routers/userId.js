@@ -6,12 +6,12 @@ const { upload } = require('../helpers/upload');
 
 
 router
-  .post('/register', upload.single('image'), userIdController.insertUser)
+  .post('/register',userIdController.insertUser)
   .post('/login', userIdController.loginUser)
   .get('/', userIdController.getUser)
   .get('/auth/', userIdController.authUser)
   .get('/:userId', userIdController.detailUser)
-  .patch('/:userId', userIdController.updateUser)
+  .patch('/:userId',upload.single('image'), userIdController.updateUser)
   .patch('/resetpassword/:userId', userIdController.resetPassword)
   .delete('/:userId', userIdController.deleteUser)
 

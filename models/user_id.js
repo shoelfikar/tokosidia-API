@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: "id"
     }),
     user_id.belongsTo(models.seller, {
-      foreignKey: "seller_id",
+      foreignKey: "id",
       as: "store",
       sourceKey: "id"
     }),
@@ -54,6 +54,11 @@ module.exports = (sequelize, DataTypes) => {
       as: "userWish",
       sourceKey: "id"
     })
+    // user_id.belongsTo(models.seller, {
+    //   foreignKey: "seller_id",
+    //   as: "pemilik",
+    //   // sourceKey: "id"
+    // })
     // user_id.belongsTo(models.status, {
     //   foreignKey: 'id',
     //   as: 'statusName'
