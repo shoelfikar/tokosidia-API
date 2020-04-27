@@ -55,7 +55,7 @@ module.exports = {
       const offset = null;
       const setOffset = (page * setLimit) - setLimit;
       const limit = setLimit + setOffset;
-      const path = `http://${req.get('host') + req.baseUrl}?page`;
+      const path = `http://192.168.1.84${req.baseUrl}?page`;
       const { search } = req.query;
       const include = [
         {
