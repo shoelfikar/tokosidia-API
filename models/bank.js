@@ -5,6 +5,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   bank.associate = function(models) {
     // associations can be defined here
+    bank.hasMany(models.bank_account, {
+      foreignKey: 'bank_id',
+      as: 'bankName',
+      sourceKey: "id"
+    })
   };
   return bank;
 };

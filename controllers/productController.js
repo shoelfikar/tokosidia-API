@@ -1,3 +1,4 @@
+// const product = require('../models').product;
 // const category = require('../models').category;
 // const subCategory = require('../models').subCategory;
 // const subSubCategory = require('../models').subSubCategory;
@@ -12,6 +13,8 @@ module.exports = {
     const { files } = req;
     try {
       const input = req.body;
+      // input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+      console.log('here')
       // input.image = `http://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
       const data = await product.create(input);
       if (data === undefined) {
@@ -42,7 +45,6 @@ module.exports = {
   }),
   getProduct: (async(req,res) => {
     let pagination = {};
-    
     try {
       let param = {};
       let searchParam = {};
@@ -52,7 +54,7 @@ module.exports = {
       const offset = null;
       const setOffset = (page * setLimit) - setLimit;
       const limit = setLimit + setOffset;
-      const path = `http://${req.get('host') + req.baseUrl}?page`;
+      const path = `http://192.168.1.84${req.baseUrl}?page`;
       const { search } = req.query;
       const include = [
         {
@@ -141,6 +143,20 @@ module.exports = {
         where: {
           id: productId,
         },
+        include: [
+          {
+            model: imageDetail,
+            as: 'images',
+            attributes: ['image'],
+          }
+        ]
+        // include: [
+        //   {model: user_id, as:'users', attributes: ['email', 'fullname'], include: [
+        //     {model: address, as: 'addresses', attributes:['address', 'phone_number']},
+        //     {model: seller, as:'store', attributes: ['name', 'address']}
+        //   ]},
+        //   {model: seller, as:'seller', attributes: ['name', 'address'],}
+        // ]
       });
       if (!data) {
         response.status = 404;

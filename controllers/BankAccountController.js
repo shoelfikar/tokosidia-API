@@ -1,4 +1,6 @@
 const bankAccount = require('../models').bank_account;
+const bank = require('../models').bank;
+const user = require('../models').user_id;
 const helpers = require('../helpers/response');
 
 module.exports = {
@@ -29,7 +31,18 @@ module.exports = {
   getBankAccount: (async(req,res) => {
     let response = {};
     try {
-      const data = await bankAccount.findAll({});
+      const data = await bankAccount.findAll({
+        include: {
+          model: bank,
+          as: 'bankName',
+          attributes: ['bank_name']
+        },
+        include: {
+          model: user,
+          as: 'account',
+          attributes: ['fullname']
+        }
+      });
       if (data.length === 0) {
         response.status = 404;
         response.message = 'Bank Acoount List not Found!';
@@ -58,6 +71,16 @@ module.exports = {
         where: {
           id: accountId,
         },
+        include: {
+          model: bank,
+          as: 'bankName',
+          attributes: ['bank_name']
+        },
+        include: {
+          model: user,
+          as: 'account',
+          attributes: ['fullname']
+        }
       });
 
       if (!data) {
