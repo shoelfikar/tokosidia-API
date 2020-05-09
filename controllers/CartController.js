@@ -1,12 +1,19 @@
 const cart = require('../models').cart;
 const helpers = require('../helpers/response');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   insertCart : (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await cart.create(body);
+      const param = {
+        product_id: body.product_id,
+        user_id: req.user_id,
+        quantity: body.quantity
+      }
+      const data = await cart.create(param);
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
@@ -28,8 +35,13 @@ module.exports = {
 
   getCart: (async(req, res) => {
     let response = {};
+      const token = req.headers.authorization;
+      
     try {
       const data = await cart.findAll({
+        where: {
+          user_id: req.user_id,
+        }
       });
       if (data.length === 0) {
         response.status = 404;

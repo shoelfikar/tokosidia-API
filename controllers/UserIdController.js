@@ -2,15 +2,15 @@
 const bcrypt = require('bcryptjs');
 const user_id = require('../models').user_id;
 const helpers = require('../helpers/response');
-
-
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 module.exports = {
   insertUser: (async (req, res) => {
     let response = {};
     try {
       const salt = bcrypt.genSaltSync(10);
-      console.log('email');
+      // console.log(email);
         
       const data = await user_id.create({
         email: req.body.email,
@@ -31,6 +31,8 @@ module.exports = {
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
       } else {
+        const token = jwt.sign({ id: data.id, email: data.email }, process.env.SECRET_KEY);
+        data.dataValues.token = token;
         response.status = 200;
         response.message = 'OK';
         response.data = data;
@@ -149,9 +151,7 @@ module.exports = {
           id: userId,
         },
       });
-      console.log(edit);
-      
-      console.log('here');
+  
       if (edit === 1) {
         response.status = 201;
         response.message = 'User Successfully Edited';

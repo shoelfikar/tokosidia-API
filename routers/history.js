@@ -4,11 +4,11 @@ const historyController = require('../controllers/HistoryController');
 
 
 router
-  .post('/', historyController.insertHistory)
+  // .post('/', historyController.insertHistory)
   .get('/', historyController.getHistory)
-  .get('/:historyId', historyController.detailHistory)
-  .put('/:historyId', historyController.updateHistory)
-  .delete('/:historyId', historyController.deleteHistory)
+  // .get('/:historyId', historyController.detailHistory)
+  // .put('/:historyId', historyController.updateHistory)
+  // .delete('/:historyId', historyController.deleteHistory)
 
 
 

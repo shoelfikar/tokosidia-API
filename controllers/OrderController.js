@@ -1,17 +1,43 @@
 const order = require('../models').order;
+const OrderDetail = require('../models').order_detail;
 const helpers = require('../helpers/response');
+const cart = require('../models').cart;
 
 module.exports = {
   insertOrder: (async(req, res) => {
     let response = {};
     try {
       const body = req.body;
-      const data = await order.create(body);
+      const { products } = req.body
+      const data = await order.create({
+        user_id: req.user_id,
+        invoice: body.invoice,
+        shipment: body.shipment,
+        total: body.total,
+        payment: body.payment
+      });
       if (data === undefined) {
         response.status = 404;
         response.message = 'Data Not Found';
         helpers.helpers(res, response);
       } else {
+        let productDetail = [];
+        console.log(products);
+        
+        products.forEach(async (product) => {
+            await OrderDetail.create({
+              order_id: data.id,
+              product_id: product.product_id,
+              product_quantity: product.quantity,
+            });
+            await cart.destroy({
+              where: {
+                user_id: req.user_id,
+                product_id: product.product_id
+              }
+            })
+            
+        });
         response.status = 200;
         response.message = 'Create Success!';
         response.data = data;
