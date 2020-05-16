@@ -1,6 +1,12 @@
-# Tokosidia API (CLONE TOKOPEDIA) [![Release Version](https://img.shields.io/badge/release-v.1.0-blue)](https://github.com/HiRahmat-Dev/library-api/releases/tag/1.0) [![Node JS](https://img.shields.io/badge/Dependencies-Express%20JS-green)](https://nodejs.org/en/)
+# Tokosidia API (CLONE TOKOPEDIA) [![Node JS](https://img.shields.io/badge/Dependencies-Express%20JS-green)](https://nodejs.org/en/)
+
 <p align="center">
-  <a href="https://nodejs.org/">
+  <a href="https://raw.githubusercontent.com/HiRahmat-Dev/tokosidia-API/master/images/tokosidia-logo.png" target="blank">
+    <img width="340" src="https://raw.githubusercontent.com/HiRahmat-Dev/tokosidia-API/master/images/tokosidia-logo.png">
+  </a>
+</p>
+<p align="center">
+  <a href="https://nodejs.org/" target="blank">
     <img src="https://cdn-images-1.medium.com/max/871/1*d2zLEjERsrs1Rzk_95QU9A.png">
   </a>
 </p>
@@ -8,19 +14,19 @@
 ## Table of Contents
 - [Prerequiste](#prerequiste)
 - [Instalation](#installation)
-
 - [Link Collection Postman](#link-collection-postman)
-- [Structur Folder](#structur-folder)
+- [Structur Folder](#structure-folder)
 
 ## Prerequiste
 - Node.js - Download and Install [Node.js](https://nodejs.org/en/).
 - MySQL - Download and Install [MySQL](https://www.mysql.com/downloads/) - Make sure it's running on the default port.
+- Sequelize - Download and Install [Sequelize](https://sequelize.org/)
 
 ## Installation
 ### Clone
 ```
-$ git clone https://github.com/HiRahmat-Dev/library-api.git
-$ cd library-api
+$ git clone https://github.com/HiRahmat-Dev/tokosidia-API.git
+$ cd tokosidia-API
 $ npm install
 ```
 
@@ -36,7 +42,7 @@ DB_USER="Your_Username"
 DB_PASSWORD="Your_Password"
 DB_NAME="Your_Table"
 
-SERVER_PORT=8000
+SERVER_PORT="Your_Port"
 
 ```
 
@@ -50,22 +56,75 @@ $ npm run serve
 ## Structure Folder
 ```
 \---src
-|    \---config
-|    |   +---db.js            
 |    \---controller
-|    |   +---book.js
-|    |   +---user.js
+|    |   +---AddressController.js
+|    |   +---BankAccountController.js
+|    |   +---BankController.js
+|    |   +---CartController.js
+|    |   +---CategoryController.js
+|    |   +---FavoritShopController.js
+|    |   +---HistoryController.js
+|    |   +---HistoryDetailController.js
+|    |   +---OrderController.js
+|    |   +---OrderDetailController.js
+|    |   +---productController.js
+|    |   +---RoleIdController.js
+|    |   +---SellerController.js
+|    |   +---StatusController.js
+|    |   +---SubCategoryController.js
+|    |   +---SubSubCategoryController.js
+|    |   +---UserIdController.js
+|    |   +---WishlistController.js
 |    \---helper
-|    |   +---helper.js
-|    \---model
-|    |   +---books.js
-|    |   +---user.js
-|    \---router
-|    |   +---books.js
+|    |   +---auth.js
+|    |   +---response.js
+|    |   +---upload.js
+|    \---models
+|    |   +---address.js
+|    |   +---bank_account.js
+|    |   +---bank.js
+|    |   +---cart.js
+|    |   +---category.js
+|    |   +---condition.js
+|    |   +---expedition.js
+|    |   +---favorit_shop.js
+|    |   +---history_detail.js
+|    |   +---history.js
+|    |   +---imageDetail.js
 |    |   +---index.js
-|    |   +---register.js
-|    |   +---user.js
-+---server.js
+|    |   +---order_detail.js
+|    |   +---order.js
+|    |   +---payment.js
+|    |   +---product.js
+|    |   +---role_id.js
+|    |   +---seller.js
+|    |   +---shipment_time.js
+|    |   +---status.js
+|    |   +---subcategory.js
+|    |   +---subsubcategory.js
+|    |   +---user_id.js
+|    |   +---wishlist.js
+|    \---router
+|    |   +---address.js
+|    |   +---bank.js
+|    |   +---bankAccount.js
+|    |   +---cart.js
+|    |   +---category.js
+|    |   +---favoritShop.js
+|    |   +---history.js
+|    |   +---historyDetail.js
+|    |   +---index.js
+|    |   +---order.js
+|    |   +---orderDetail.js
+|    |   +---product.js
+|    |   +---roleId.js
+|    |   +---seller.js
+|    |   +---status.js
+|    |   +---subCategory.js
+|    |   +---subSubCategory.js
+|    |   +---userId.js
+|    |   +---wishlist.js
++---app.js
 ```
 
 ## Contributors
@@ -76,6 +135,30 @@ $ npm run serve
         <a href="https://github.com/HiRahmat-Dev/">
           <img width="150" src="https://avatars2.githubusercontent.com/u/55150659?s=460&u=c7171bb4128787c303efdce0d62bc86289f1211b&v=4" alt="Rahmat Hidayatullah"><br/>
           <b>Rahmat Hidayatullah</b>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/fblazt">
+          <img width="150" src="https://avatars3.githubusercontent.com/u/48191467?s=400&u=c06616d146930100dfb5eb5c4ab10fd00d01ac41&v=4" alt="Firman"><br/>
+          <b>Firman</b>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/azmprllynsa">
+          <img width="150" src="https://avatars1.githubusercontent.com/u/60286175?s=400&v=4" alt="azmprllynsa"><br/>
+          <b>azmprllynsa</b>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/m-joseph27">
+          <img width="150" src="https://avatars2.githubusercontent.com/u/60948526?s=400&u=c258f85ec35ccfda6ce3911dae79d45e335088b3&v=4" alt="Muhammad Yusuf"><br/>
+          <b>Muhammad Yusuf</b>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/shoelfikar">
+          <img width="150" src="https://avatars2.githubusercontent.com/u/55390061?s=400&u=cf1b3f5b68b4f984a45cc215c7b98150ab01276b&v=4" alt="Sulfikar"><br/>
+          <b>Sulfikar</b>
         </a>
       </td>
     </tr>
