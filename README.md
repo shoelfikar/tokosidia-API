@@ -1,4 +1,4 @@
-# Tokosidia API (CLONE TOKOPEDIA)
+# Tokosidia API (CLONE Tokopedia)
 
 [![Node JS](https://img.shields.io/badge/Dependencies-Express%20JS-green)](https://nodejs.org/en/)
 ![GitHub repo size](https://img.shields.io/github/repo-size/HiRahmat-Dev/tokosidia-API)
@@ -187,7 +187,3 @@ Fork the Project
     </tr>
   </table>
 </center>
-
-### License
-----
-[Website](http://www.sekolahinovator.org) © [Rahmat Hidayatullah](https://github.com/HiRahmat-Dev/)
