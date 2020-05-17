@@ -25,6 +25,8 @@
 - [Link Collection Postman](#link-collection-postman)
 - [Structur Folder](#structure-folder)
 - [Contributing](#contributing)
+- [Related Project](#related-project)
+- [Contributors](#contributors)
 
 ## Prerequiste
 - Node.js - Download and Install [Node.js](https://nodejs.org/en/).
