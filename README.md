@@ -182,7 +182,7 @@ Fork the Project
       </td>
       <td align="center">
         <a href="https://github.com/shoelfikar">
-          <img width="150" src="https://avatars2.githubusercontent.com/u/55390061?s=400&u=cf1b3f5b68b4f984a45cc215c7b98150ab01276b&v=4" alt="Sulfikar"><br/>
+          <img width="150" src="https://avatars2.githubusercontent.com/u/55390061?s=400&u=cf1b3f5b68b4f984a45cc215c7b98150ab01276b&v=4" alt="Sulfikardi"><br/>
           <b>Sulfikar</b>
         </a>
       </td>
